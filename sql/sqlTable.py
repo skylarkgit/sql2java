@@ -39,7 +39,7 @@ class SQLTable:
         foreign = field.split('(')[2].split(')')[0].strip().lower().strip()
         foreignTable = field.split('(')[1].split(' ')[-1].strip().lower().strip()
         linkType = '@'+(field.split('@')[1].strip())
-        self.fields[local].setLink(self.db.tables[foreignTable], foreign, linkType)
+        self.fields[local].setLink(self.db.tables[foreignTable], foreign, linkType, self.name)
 
     @staticmethod
     def getTableName(query):

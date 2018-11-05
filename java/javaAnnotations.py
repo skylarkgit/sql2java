@@ -3,7 +3,7 @@ JAVA_ANNOTATIONS['primary'] = ['@Id', '@GeneratedValue(strategy = GenerationType
 JAVA_ANNOTATIONS['@OneToOne'] = ['@OneToOne', '@JoinColumn(name="{id}")']
 JAVA_ANNOTATIONS['@ManyToOne'] = ['@ManyToOne', '@JoinColumn(name="{foreignId}")']
 JAVA_ANNOTATIONS['@OneToMany'] = ['@OneToMany', '@JoinColumn(name="{foreignId}")']
-JAVA_ANNOTATIONS['@ManyToMany'] = ['@ManyToMany']
+JAVA_ANNOTATIONS['@ManyToMany'] = ['@ManyToMany','@JoinTable(name="{relationTable}", joinColumns=@JoinColumn(name="{foreignId}"), inverseJoinColumns=@JoinColumn(name="{localIdOfForeign}"))']
 JAVA_ANNOTATIONS['@JsonIgnore'] = ['@JsonIgnore']
 JAVA_ANNOTATIONS['@OneToOnForeign'] = ['@OneToOne(mappedBy="{varname}")', '@JsonIgnore']
 def annotationsFor(metaData, annotateProperties):

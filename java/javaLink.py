@@ -51,12 +51,16 @@ class JAVALink:
             foreign.setup()
         if '@ManyToMany(' in self.linkType:
             foreign.metaData = self.linkType + ' @JsonIgnore'
-            listType = underScoreToCamelCase(self.linkType.split('(')[1].split(')')[0])
+            listType = underScoreToCamelCase(self.linkType.split('(')[1].split(',')[0].strip())
+            localIdOfForeign = self.linkType.split('(')[1].split(',')[1].split(')')[0].strip()
             if listType not in self.javaClass.project.models:
                 listType = 'String'
             foreign.name = firstSmall(self.javaClass.name) + 'List'
             foreign.type = 'List<'+listType+'>'
             foreign.javaClass = self.javaClass.project.models[self.remoteClass]
             foreign.javaClass.properties[foreign.name] = foreign
+            foreign.annotateProperties['foreignId'] = firstSmall(underScoreToCamelCase(self.sqlLink.localField.lower()))
+            foreign.annotateProperties['localIdOfForeign'] = firstSmall(underScoreToCamelCase(localIdOfForeign.lower()))
+            foreign.annotateProperties['relationTable'] = self.sqlLink.ownerTableName
             foreign.setup()
         return foreign

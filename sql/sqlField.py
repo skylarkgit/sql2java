@@ -1,9 +1,10 @@
 class SQLLink :
-    def __init__(self, localField, remoteTable, remoteField, linkType):
+    def __init__(self, localField, remoteTable, remoteField, linkType, ownerTableName):
         self.localField = localField
         self.remoteField = remoteField
         self.remoteTable = remoteTable
         self.linkType = linkType
+        self.ownerTableName = ownerTableName
 
 class SQLField:
     def __init__(self, field):
@@ -14,5 +15,5 @@ class SQLField:
         self.metaData = field
         self.fk = None
 
-    def setLink(self, remoteTable, remoteField, linkType):
-        self.fk = SQLLink(self.name, remoteTable, remoteField, linkType)
+    def setLink(self, remoteTable, remoteField, linkType, tableName):
+        self.fk = SQLLink(self.name, remoteTable, remoteField, linkType, tableName)
