@@ -53,9 +53,10 @@ class SQLParse:
         self.db = SQLDB(name)
         query = escapeAnnotations(query)
         queries = removeComments(query).split('\n')
+        print(queries)
         queries = '\n'.join(map(lambda token: (token+' ')[0:token.find("--")].strip(), queries))
         queries = queries.split(';')
-        self.queries = map(lambda token: token.replace("\r\n","").strip(), queries)
+        self.queries = map(lambda token: token.replace("\r\n","").replace("\n","").strip(), queries)
         
         for q in queries:
             entity = SQLParse.resolve(self.db, q)

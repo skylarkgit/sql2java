@@ -15,14 +15,17 @@ class SQLTable:
         self.db = db
         self.query = query
         self.name = SQLTable.getTableName(query)
-        
-        fields = re.split(r',*(?![^()]*\))', query[self.query.find('(') + 1:-1]) #splitEscaped(, ',', '(')
+        fields = re.split(r',(?![^()]*\))', query[self.query.find('(') + 1:-1]) #splitEscaped(, ',', '(')
+        print(query)
         fields = list(map(lambda token: token.strip(), fields))
-
         self.fields = {}
 
         for field in fields:
             fieldTokens = field.split(' ')
+            if fieldTokens[0].lower().strip() == 'constraint':
+                continue
+            if fieldTokens[0].lower().strip() == 'unique':
+                continue
             if fieldTokens[0].lower().strip() == 'foreign':
                 self.addForeignConstraint(field)
             else:

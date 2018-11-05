@@ -48,6 +48,9 @@ JAVA_IMPORTS['@OneToOne'] = ['javax.persistence.OneToOne']
 JAVA_IMPORTS['@OneToMany'] = ['javax.persistence.OneToMany']
 JAVA_IMPORTS['@ManyToOne'] = ['javax.persistence.ManyToOne']
 JAVA_IMPORTS['@ManyToMany'] = ['javax.persistence.ManyToMany']
+JAVA_IMPORTS['@JsonIgnore'] = ['com.fasterxml.jackson.annotation.JsonIgnore']
+JAVA_IMPORTS['@JoinColumn'] = ['javax.persistence.JoinColumn']
+JAVA_IMPORTS['@JsonIgnoreProperties'] = ['com.fasterxml.jackson.annotation.JsonIgnoreProperties']
 
 def resolveJAVAImport(type, package):
     if '<' in type:

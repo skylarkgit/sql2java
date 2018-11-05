@@ -8,6 +8,7 @@ class SQLLink :
 class SQLField:
     def __init__(self, field):
         fieldTokens = field.split(' ')
+        print(fieldTokens)
         self.name = fieldTokens[0].lower().strip()
         self.type = fieldTokens[1].split('(')[0].lower().strip()
         self.metaData = field

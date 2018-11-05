@@ -12,6 +12,7 @@ class JAVALink:
         self.remoteClass = underScoreToCamelCase(sqlLink.remoteTable.name)
         self.linkType = sqlLink.linkType
         self.javaClass = ownerClass
+        self.sqlLink = sqlLink
         self.localPart = self.setUpLocal()
         self.foreignPart = self.setUpForiegn()
 
@@ -23,6 +24,8 @@ class JAVALink:
             local.type = self.remoteClass
             local.javaClass = self.javaClass
             local.javaClass.properties[local.name] = local
+            local.annotateProperties['foreignId'] = self.sqlLink.localField.lower()
+            local.annotateProperties['id'] = self.sqlLink.localField.lower()
             local.setup()
         return local
     
@@ -30,18 +33,24 @@ class JAVALink:
         foreign = JAVAProperty()
         foreign.metaData = self.linkType
         if '@OneToOne' in self.linkType:
+            foreign.metaData = '@OneToOnForeign'
             foreign.name = firstSmall(self.javaClass.name)
             foreign.type = self.javaClass.name
             foreign.javaClass = self.javaClass.project.models[self.remoteClass]
             foreign.javaClass.properties[foreign.name] = foreign
+            foreign.annotateProperties['id'] = self.sqlLink.localField.lower()
+            foreign.annotateProperties['varname'] = firstSmall(self.remoteClass)
             foreign.setup()
         if '@ManyToOne' in self.linkType:
+            foreign.metaData = '@OneToMany' + ' @JsonIgnore'
             foreign.name = firstSmall(self.javaClass.name) + 'List'
             foreign.type = 'List<'+self.javaClass.name+'>'
             foreign.javaClass = self.javaClass.project.models[self.remoteClass]
             foreign.javaClass.properties[foreign.name] = foreign
+            foreign.annotateProperties['foreignId'] = self.sqlLink.localField.lower()
             foreign.setup()
         if '@ManyToMany(' in self.linkType:
+            foreign.metaData = self.linkType + ' @JsonIgnore'
             listType = underScoreToCamelCase(self.linkType.split('(')[1].split(')')[0])
             if listType not in self.javaClass.project.models:
                 listType = 'String'

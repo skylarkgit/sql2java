@@ -9,12 +9,14 @@ class JAVAProperty:
         self.scope = 'private'
         self.isFK = False
         self.imports = set()
+        self.annotateProperties = {}
+        self.annotateProperties['foreignId'] = ''
         if sqlField != None:
             self.javaClass = javaClass
             self.name = firstSmall(underScoreToCamelCase(sqlField.name)).strip()
             self.type = sqlToJAVAType(sqlField.type)
             self.metaData = sqlField.metaData
-            self.isFK = (sqlField.fk != None)
+            self.isFK = (sqlField.fk is not None)
             self.setup()
 
     def setup(self):
@@ -23,7 +25,7 @@ class JAVAProperty:
 
     def annotate(self):
         self.annotations = []
-        for annotation in annotationsFor(self.metaData, self):
+        for annotation in annotationsFor(self.metaData, self.annotateProperties):
             self.annotations.append(annotation)
 
     def getter(self):

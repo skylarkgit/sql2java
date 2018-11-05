@@ -38,11 +38,11 @@ class JAVAClass:
         body = '\n'.join(list(map(lambda token: self.properties[token].declare(), self.properties)))
         body += '\n'.join(list(map(lambda token: self.properties[token].setter(), self.properties)))
         body += '\n'.join(list(map(lambda token: self.properties[token].getter(), self.properties)))
-        code += JavaScope('public', JavaClass(self.name, body))
+        code += '@Entity\n@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})\n'+JavaScope('public', JavaClass(self.name, body))
 
         filename = 'model/' + self.name + '.java'
         with open( filename,'w') as the_file:
             the_file.write(code)
     
     def getImports(self):
-        return '\n'.join(list(map(lambda token: JavaImport(token), self.imports)))
+        return '\n'.join(list(map(lambda token: JavaImport(token), self.imports))) + '\nimport javax.persistence.Entity;\nimport com.fasterxml.jackson.annotation.JsonIgnoreProperties;\n'
