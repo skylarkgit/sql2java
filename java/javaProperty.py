@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 from dialectUtil import *
 from sql.sqlField import SQLField
-from java.javaAnnotations import annotationsFor
+from java.javaAnnotations import *
 from java.javaSnippets import JavaFunction
 
 class JAVAProperty:
@@ -27,6 +27,8 @@ class JAVAProperty:
         self.annotations = []
         for annotation in annotationsFor(self.metaData, self.annotateProperties):
             self.annotations.append(annotation)
+        for annotation in annotationsForType(self):
+            self.annotations.append(annotation)
 
     def getter(self):
         return JavaFunction('public', 'get' + camel(self.name), self.type, '', 'return ' + self.name + ';')
@@ -35,6 +37,8 @@ class JAVAProperty:
         return JavaFunction('public', 'set' + camel(self.name), 'void', self.type + ' ' + self.name, 'this.' + self.name + '=' + self.name + ';')
     
     def declare(self):
+        if self.type == 'UUID':
+            return '\n'.join(self.annotations) + '\n' + self.scope + ' ' + self.type  + ' ' + self.name + ' = UUID.randomUUID();\n'    
         return '\n'.join(self.annotations) + '\n' + self.scope + ' ' + self.type  + ' ' + self.name + ';\n'
     
     def resolveImports(self):

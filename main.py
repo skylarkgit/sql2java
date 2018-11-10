@@ -9,7 +9,7 @@ if not os.path.exists('model'):
 if not os.path.exists('repository'):
     os.makedirs('repository')
 
-other = open('./sample/script-other.sql')
+other = open('./sample/main.sql')
 master = open('./sample/master.sql')
 sqlParse = SQLParse('l&f', master.read() + '\n' + other.read())
 db = sqlParse.getDB()

@@ -2,6 +2,7 @@ from sql.sqlTable import SQLTable
 from sql.sqlField import SQLField
 from sql.language import *
 from sql.sqlDB import SQLDB
+from sql.sqlType import SQLType
 
 import enum 
 class SQL_TOKEN_TYPE (enum.Enum): 
@@ -53,7 +54,7 @@ class SQLParse:
         self.db = SQLDB(name)
         query = escapeAnnotations(query)
         queries = removeComments(query).split('\n')
-        print(queries)
+        # print(queries)
         queries = '\n'.join(map(lambda token: (token+' ')[0:token.find("--")].strip(), queries))
         queries = queries.split(';')
         self.queries = map(lambda token: token.replace("\r\n","").replace("\n","").strip(), queries)
@@ -62,12 +63,16 @@ class SQLParse:
             entity = SQLParse.resolve(self.db, q)
             if (isinstance(entity, SQLTable)):
                 self.db.addTable(entity)
+            if (isinstance(entity, SQLType)):
+                self.db.addType(entity)
 
     @staticmethod
     def create(db, query):
         tokens = query.split(' ')
-        if (tokens[1].lower() == 'table'):
+        if (tokens[1].lower().strip() == 'table'):
             return SQLTable(db, query)
+        if (tokens[1].lower().strip() == 'type'):
+            return SQLType(db, query)
 
     @staticmethod
     def resolve(db, query):

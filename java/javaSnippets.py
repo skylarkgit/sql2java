@@ -1,4 +1,5 @@
-from dialectUtil import *
+#!/usr/bin/python3
+from dialectUtil import firstSmall, camel
 
 def JavaBody(code):
     return '{\n' + code + '}\n'
@@ -26,3 +27,11 @@ def setter(type, name):
 
 def declare(type, name):
     return JavaScope('private', camel(type) + ' '  + firstSmall(name)+';')
+
+CLASS_ANNOTATIONS = {}
+def classAnnotations(javaClass):
+    annotations = set()
+    for classMetaData in CLASS_ANNOTATIONS:
+        if classMetaData in javaClass.metaData:
+            annotations.add(CLASS_ANNOTATIONS[classMetaData])
+    return annotations

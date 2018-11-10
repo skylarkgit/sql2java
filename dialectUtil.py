@@ -10,15 +10,16 @@ SQLToJAVAType['int'] = 'Integer'
 SQLToJAVAType['json'] = 'String'
 SQLToJAVAType['double'] = 'Double'
 SQLToJAVAType['float'] = 'Float'
-SQLToJAVAType['timestamp'] = 'Timestamp'
+SQLToJAVAType['timestamp'] = 'Date'
 SQLToJAVAType['boolean'] = 'Boolean'
 
 def sqlToJAVAType(type):
+    original = type
     type = type.lower()
     if type in SQLToJAVAType:
         return SQLToJAVAType[type]
     else:
-        return 'String'
+        return underScoreToCamelCase(original)
 
 def camel(strToConvert):
     return strToConvert[:1].capitalize() + strToConvert[1:]
@@ -40,7 +41,7 @@ JAVA_IMPORTS['Float'] = []
 JAVA_IMPORTS['List'] = ['java.util.List']
 JAVA_IMPORTS['Set'] = ['java.util.Set']
 JAVA_IMPORTS['UUID'] = ['java.util.UUID']
-JAVA_IMPORTS['Timestamp'] = ['java.sql.Timestamp']
+JAVA_IMPORTS['Date'] = ['java.util.Date']
 JAVA_IMPORTS['@Entity'] = ['javax.persistence.Entity']
 JAVA_IMPORTS['@Id'] = ['javax.persistence.Id']
 JAVA_IMPORTS['@GeneratedValue'] = ['javax.persistence.GeneratedValue', 'javax.persistence.GenerationType']
@@ -52,6 +53,8 @@ JAVA_IMPORTS['@JsonIgnore'] = ['com.fasterxml.jackson.annotation.JsonIgnore']
 JAVA_IMPORTS['@JoinColumn'] = ['javax.persistence.JoinColumn']
 JAVA_IMPORTS['@JsonIgnoreProperties'] = ['com.fasterxml.jackson.annotation.JsonIgnoreProperties']
 JAVA_IMPORTS['@JoinTable'] = ['javax.persistence.JoinColumn', 'javax.persistence.JoinTable']
+JAVA_IMPORTS['@Enumerated'] = ['javax.persistence.Enumerated', 'javax.persistence.EnumType']
+JAVA_IMPORTS['@Type'] =  ['org.hibernate.annotations.Type']
 
 def resolveJAVAImport(type, package):
     if '<' in type:

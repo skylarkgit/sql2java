@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 from sql.sqlDB import SQLDB
 from java.javaProject import JAVAProject
 
