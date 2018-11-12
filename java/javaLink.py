@@ -19,21 +19,23 @@ class JAVALink:
     def setUpLocal(self):
         local = JAVAProperty()
         local.metaData = self.linkType
-        if '@OneToOne' in self.linkType or '@ManyToOne' in self.linkType:
+        if '@OneToOne' in self.linkType:
+            """ or '@ManyToOne' in self.linkType """
+            local.metaData += ' @JsonIgnore'
             local.name = firstSmall(self.remoteClass)
             local.type = self.remoteClass
             local.javaClass = self.javaClass
             local.javaClass.properties[local.name] = local
             local.annotateProperties['foreignId'] = self.sqlLink.localField.lower()
             local.annotateProperties['id'] = self.sqlLink.localField.lower()
-            local.setup()
+            local.setup() 
         return local
     
     def setUpForiegn(self):
         foreign = JAVAProperty()
         foreign.metaData = self.linkType
         if '@OneToOne' in self.linkType:
-            foreign.metaData = '@OneToOnForeign'
+            foreign.metaData = ' @OneToOnForeign'
             foreign.name = firstSmall(self.javaClass.name)
             foreign.type = self.javaClass.name
             foreign.javaClass = self.javaClass.project.models[self.remoteClass]
@@ -42,7 +44,7 @@ class JAVALink:
             foreign.annotateProperties['varname'] = firstSmall(self.remoteClass)
             foreign.setup()
         if '@ManyToOne' in self.linkType:
-            foreign.metaData = '@OneToMany' + ' @JsonIgnore'
+            foreign.metaData = '@OneToMany'
             foreign.name = firstSmall(self.javaClass.name) + 'List'
             foreign.type = 'List<'+self.javaClass.name+'>'
             foreign.javaClass = self.javaClass.project.models[self.remoteClass]
@@ -50,7 +52,7 @@ class JAVALink:
             foreign.annotateProperties['foreignId'] = self.sqlLink.localField.lower()
             foreign.setup()
         if '@ManyToMany(' in self.linkType:
-            foreign.metaData = self.linkType + ' @JsonIgnore'
+            foreign.metaData = self.linkType
             listType = underScoreToCamelCase(self.linkType.split('(')[1].split(',')[0].strip())
             localIdOfForeign = self.linkType.split('(')[1].split(',')[1].split(')')[0].strip()
             if listType not in self.javaClass.project.models:
