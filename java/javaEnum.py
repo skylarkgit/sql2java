@@ -1,3 +1,4 @@
+import constants as CONST
 from java.javaSnippets import JavaPackage
 from java.templates import *
 from dialectUtil import *
@@ -9,12 +10,12 @@ class JAVAEnum:
         self.project = project
 
     def save(self):
-        code = JavaPackage(self.project.package + '.modal')
+        code = JavaPackage(self.project.package + '.' + CONST.MODEL)
         enumDetails = {}
         enumDetails['typeName'] = self.name
         enumDetails['typeList'] = ', '.join(self.typeList)
         code += self.getBody().format(**enumDetails)
-        filename = 'modal/' + self.name + '.java'
+        filename = CONST.MODEL + '/' + self.name + '.java'
         with open( filename,'w') as the_file:
             the_file.write(code)
 

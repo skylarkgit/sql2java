@@ -1,3 +1,5 @@
+import constants as CONST
+
 JAVA_ANNOTATIONS = {}
 JAVA_ANNOTATIONS['primary'] = ['@Id', '@GeneratedValue(strategy = GenerationType.IDENTITY)']
 JAVA_ANNOTATIONS['@OneToOne'] = ['@OneToOne', '@JoinColumn(name="{id}")', '@Filter(name="activeFilter", condition="true = is_active")']
@@ -40,5 +42,5 @@ def annotationsForType(javaProperty):
         return annotations
     else:
         annotations.append('@Enumerated(EnumType.STRING)')
-        annotations.append('@Type(type = "{0}.modal.SQLEnumType")'.format(javaProperty.javaClass.project.package))
+        annotations.append(('@Type(type = "{0}.' + CONST.MODEL + '.SQLEnumType")').format(javaProperty.javaClass.project.package))
     return annotations

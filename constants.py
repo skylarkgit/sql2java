@@ -1,0 +1,2 @@
+MODEL = 'model'
+REPO = 'repository'

@@ -21,7 +21,7 @@ class JAVALink:
         local.metaData = self.linkType
         if '@OneToOne' in self.linkType:
             """ or '@ManyToOne' in self.linkType """
-            local.metaData += ' @JsonIgnore'
+            local.metaData += ' @JsonWriteOnly'
             local.name = firstSmall(self.remoteClass)
             local.type = self.remoteClass
             local.javaClass = self.javaClass

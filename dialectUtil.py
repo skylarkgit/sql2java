@@ -1,3 +1,4 @@
+import constants as CONST
 import re
 import config
 
@@ -73,4 +74,4 @@ def resolveJAVAImport(type, package):
     type = type.split('(')[0].strip()
     if type in JAVA_IMPORTS:
         return JAVA_IMPORTS[type]
-    return [package + '.modal.' + type]
+    return [package + '.' + CONST.MODEL + '.' + type]

@@ -21,6 +21,7 @@ class JAVAProject:
     def save(self):
         for model in self.models:
             self.models[model].save()
+            self.models[model].saveRepo()
         for javaType in self.types:
             self.types[javaType].save()
             
