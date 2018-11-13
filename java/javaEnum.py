@@ -9,12 +9,12 @@ class JAVAEnum:
         self.project = project
 
     def save(self):
-        code = JavaPackage(self.project.package + '.model')
+        code = JavaPackage(self.project.package + '.modal')
         enumDetails = {}
         enumDetails['typeName'] = self.name
         enumDetails['typeList'] = ', '.join(self.typeList)
         code += self.getBody().format(**enumDetails)
-        filename = 'model/' + self.name + '.java'
+        filename = 'modal/' + self.name + '.java'
         with open( filename,'w') as the_file:
             the_file.write(code)
 

@@ -42,19 +42,25 @@ class JAVAClass:
             extension = ' extends Auditable<Long>'
         self.imports.add('javax.persistence.Entity')
         self.imports.add('com.fasterxml.jackson.annotation.JsonIgnoreProperties')
+        self.imports.add('javax.persistence.PrePersist')
         for javaProperty in self.properties:
             javaProperty = self.properties[javaProperty]
             for importfile in javaProperty.imports:
                 self.imports.add(importfile)
-        code = JavaPackage(self.project.package + '.model')
+        code = JavaPackage(self.project.package + '.modal')
         code += self.getImports()
         body = '\n'.join(sorted(list(map(lambda token: self.properties[token].declare(), self.properties)),key = len))
         body += '\n'.join(list(map(lambda token: self.properties[token].setter(), self.properties)))
         body += '\n'.join(list(map(lambda token: self.properties[token].getter(), self.properties)))
+        prePersistCode = ''
+        if 'uuid' in self.metaData:
+            prePersistCode += '\nuuid = UUID.randomUUID();\n'
+        prePersist = '\n@PrePersist\npublic void prePersist(){{{0}}}\n'
+        body += prePersist.format(prePersistCode)
         code += '\n'.join(classAnnotations(self))
         code += '@Entity\n@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})\n'+JavaScope('public', JavaClass(self.name + extension, body))
 
-        filename = 'model/' + self.name + '.java'
+        filename = 'modal/' + self.name + '.java'
         with open( filename,'w') as the_file:
             the_file.write(code)
     

@@ -37,8 +37,8 @@ class JAVAProperty:
         return JavaFunction('public', 'set' + camel(self.name), 'void', self.type + ' ' + self.name, 'this.' + self.name + '=' + self.name + ';')
     
     def declare(self):
-        if self.type == 'UUID':
-            return '\n'.join(self.annotations) + '\n' + self.scope + ' ' + self.type  + ' ' + self.name + ' = UUID.randomUUID();\n'    
+        #if self.type == 'UUID':
+        #    return '\n'.join(self.annotations) + '\n' + self.scope + ' ' + self.type  + ' ' + self.name + ' = UUID.randomUUID();\n'    
         return '\n'.join(self.annotations) + '\n' + self.scope + ' ' + self.type  + ' ' + self.name + ';\n'
     
     def resolveImports(self):

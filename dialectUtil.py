@@ -56,6 +56,7 @@ JAVA_IMPORTS['@JsonIgnoreProperties'] = ['com.fasterxml.jackson.annotation.JsonI
 JAVA_IMPORTS['@JoinTable'] = ['javax.persistence.JoinColumn', 'javax.persistence.JoinTable']
 JAVA_IMPORTS['@Enumerated'] = ['javax.persistence.Enumerated', 'javax.persistence.EnumType']
 JAVA_IMPORTS['@Type'] =  ['org.hibernate.annotations.Type']
+JAVA_IMPORTS['@Filter'] =  ['org.hibernate.annotations.Filter']
 
 def resolveJAVAImport(type, package):
     if '<' in type:
@@ -72,4 +73,4 @@ def resolveJAVAImport(type, package):
     type = type.split('(')[0].strip()
     if type in JAVA_IMPORTS:
         return JAVA_IMPORTS[type]
-    return [package + '.model.' + type]
+    return [package + '.modal.' + type]

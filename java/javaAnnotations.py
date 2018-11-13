@@ -1,12 +1,12 @@
 JAVA_ANNOTATIONS = {}
 JAVA_ANNOTATIONS['primary'] = ['@Id', '@GeneratedValue(strategy = GenerationType.IDENTITY)']
-JAVA_ANNOTATIONS['@OneToOne'] = ['@OneToOne', '@JoinColumn(name="{id}")']
-JAVA_ANNOTATIONS['@ManyToOne'] = ['@ManyToOne', '@JoinColumn(name="{foreignId}")']
-JAVA_ANNOTATIONS['@OneToMany'] = ['@OneToMany(cascade = {{CascadeType.ALL}}, orphanRemoval=true)', '@JoinColumn(name="{foreignId}")']
-JAVA_ANNOTATIONS['@ManyToMany'] = ['@ManyToMany','@JoinTable(name="{relationTable}", joinColumns=@JoinColumn(name="{foreignId}"), inverseJoinColumns=@JoinColumn(name="{localIdOfForeign}"))']
+JAVA_ANNOTATIONS['@OneToOne'] = ['@OneToOne', '@JoinColumn(name="{id}")', '@Filter(name="activeFilter", condition="true = is_active")']
+JAVA_ANNOTATIONS['@ManyToOne'] = ['@ManyToOne', '@JoinColumn(name="{foreignId}")', '@Filter(name="activeFilter", condition="true = is_active")']
+JAVA_ANNOTATIONS['@OneToMany'] = ['@OneToMany(cascade = {{CascadeType.ALL}}, orphanRemoval=true)', '@JoinColumn(name="{foreignId}")', '@Filter(name="activeFilter", condition="true = is_active")']
+JAVA_ANNOTATIONS['@ManyToMany'] = ['@ManyToMany','@JoinTable(name="{relationTable}", joinColumns=@JoinColumn(name="{foreignId}"), inverseJoinColumns=@JoinColumn(name="{localIdOfForeign}"))', '@Filter(name="activeFilter", condition="true = is_active")']
 JAVA_ANNOTATIONS['@JsonIgnore'] = ['@JsonIgnore']
 JAVA_ANNOTATIONS['@JsonWriteOnly'] = ['@JsonProperty(access = Access.WRITE_ONLY)']
-JAVA_ANNOTATIONS['@OneToOnForeign'] = ['@OneToOne(mappedBy="{varname}", cascade = {{CascadeType.ALL}}, orphanRemoval=true)']
+JAVA_ANNOTATIONS['@OneToOnForeign'] = ['@OneToOne(mappedBy="{varname}", cascade = {{CascadeType.ALL}}, orphanRemoval=true)', '@Filter(name="activeFilter", condition="true = is_active")']
 
 def annotationsFor(metaData, annotateProperties):
     metaData = metaData.lower()
@@ -40,5 +40,5 @@ def annotationsForType(javaProperty):
         return annotations
     else:
         annotations.append('@Enumerated(EnumType.STRING)')
-        annotations.append('@Type(type = "{0}.model.SQLEnumType")'.format(javaProperty.javaClass.project.package))
+        annotations.append('@Type(type = "{0}.modal.SQLEnumType")'.format(javaProperty.javaClass.project.package))
     return annotations
