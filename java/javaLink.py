@@ -20,7 +20,15 @@ class JAVALink:
         local = JAVAProperty()
         local.metaData = self.linkType
         if '@OneToOne' in self.linkType:
-            """ or '@ManyToOne' in self.linkType """
+            local.metaData += ' @JsonWriteOnly'
+            local.name = firstSmall(self.remoteClass)
+            local.type = self.remoteClass
+            local.javaClass = self.javaClass
+            local.javaClass.properties[local.name] = local
+            local.annotateProperties['foreignId'] = self.sqlLink.localField.lower()
+            local.annotateProperties['id'] = self.sqlLink.localField.lower()
+            local.setup()
+        if '@ManyToOne' in self.linkType:
             local.metaData += ' @JsonWriteOnly'
             local.name = firstSmall(self.remoteClass)
             local.type = self.remoteClass
@@ -44,7 +52,7 @@ class JAVALink:
             foreign.annotateProperties['varname'] = firstSmall(self.remoteClass)
             foreign.setup()
         if '@ManyToOne' in self.linkType:
-            foreign.metaData = '@OneToMany'
+            foreign.metaData = '@OneToMany @JsonWriteOnly'
             foreign.name = firstSmall(self.javaClass.name) + 'List'
             foreign.type = 'List<'+self.javaClass.name+'>'
             foreign.javaClass = self.javaClass.project.models[self.remoteClass]
@@ -52,7 +60,7 @@ class JAVALink:
             foreign.annotateProperties['foreignId'] = self.sqlLink.localField.lower()
             foreign.setup()
         if '@ManyToMany(' in self.linkType:
-            foreign.metaData = self.linkType
+            foreign.metaData = self.linkType + ' @JsonWriteOnly'
             listType = underScoreToCamelCase(self.linkType.split('(')[1].split(',')[0].strip())
             localIdOfForeign = self.linkType.split('(')[1].split(',')[1].split(')')[0].strip()
             if listType not in self.javaClass.project.models:

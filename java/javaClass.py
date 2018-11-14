@@ -60,7 +60,6 @@ class JAVAClass:
         body += prePersist.format(prePersistCode)
         code += '\n'.join(classAnnotations(self))
         code += '@Entity\n@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})\n'+JavaScope('public', JavaClass(self.name + extension, body))
-
         filename = CONST.MODEL + '/' + self.name + '.java'
         with open( filename,'w') as the_file:
             the_file.write(code)
@@ -74,6 +73,22 @@ class JAVAClass:
         with open( filename,'w') as the_file:
             the_file.write(code)
 
+    def saveDAO(self):
+        code = JavaPackage(self.project.package + '.' + CONST.DAO)
+        code += JavaImport('javax.persistence.EntityManager')
+        code += JavaImport('org.hibernate.Session')
+        code += JavaImport('org.springframework.stereotype.Repository')
+        code += JavaImport('java.util.List')
+        code += JavaImport('org.springframework.beans.factory.annotation.Autowired')
+        code += JavaImport(self.project.package + '.' + CONST.REPO + '.' + self.name + 'Repository')
+        code += JavaImport(self.project.package + '.' + CONST.MODEL + '.' + self.name)
+        safeUpdateTemplate = 'if ({0}.get{1}() != null) {0}Persisted.set{1}({0}.get{1}());'
+        safeUpdate = '\n'.join(list(map(lambda token: safeUpdateTemplate.format(firstSmall(self.name), camel(self.properties[token].name)), self.properties)))
+        daoTemplate = open('./java/templates/dao.template.java').read()
+        code += daoTemplate.format(self.name, firstSmall(self.name), safeUpdate)
+        filename = CONST.DAO + '/' + self.name + 'Dao.java'
+        with open(filename,'w') as the_file:
+            the_file.write(code)
 
     def getImports(self):
         return '\n'.join(list(map(lambda token: JavaImport(token), self.imports)))

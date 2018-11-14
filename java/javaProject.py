@@ -22,6 +22,7 @@ class JAVAProject:
         for model in self.models:
             self.models[model].save()
             self.models[model].saveRepo()
+            self.models[model].saveDAO()
         for javaType in self.types:
             self.types[javaType].save()
             

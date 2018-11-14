@@ -7,6 +7,8 @@ import os
 
 if not os.path.exists(CONST.MODEL):
     os.makedirs(CONST.MODEL)
+if not os.path.exists(CONST.DAO):
+    os.makedirs(CONST.DAO)
 if not os.path.exists(CONST.REPO):
     os.makedirs(CONST.REPO)
 
